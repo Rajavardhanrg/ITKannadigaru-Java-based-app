@@ -82,7 +82,7 @@ pipeline{
 
         stage('Deploy to EKS cluster'){
             steps{
-                withKubeConfig(caCertificate: '', clusterName: 'rajuproject-cluster', contextName: '', credentialsId: 'kube', namespace: 'microdegree', restrictKubeConfigAccess: false, serverUrl: 'https://BAF283DC60B4D753590C594BCA98E584.sk1.us-west-2.eks.amazonaws.com'){
+                withKubeConfig(caCertificate: '', clusterName: 'rajuproject-cluster', contextName: '', credentialsId: 'kube', namespace: 'microdegree', restrictKubeConfigAccess: false, serverUrl: 'https://F53E5D1275937AC71ADCD3527282201E.gr7.ap-southeast-1.eks.amazonaws.com'){
                     sh " sed -i 's|replace|${IMAGE_NAME}|g' deployment.yml "
                     sh " kubectl apply -f deployment.yml -n ${NAMESPACE}"
                 }
@@ -90,7 +90,7 @@ pipeline{
         }
         stage('verify'){
             steps{
-                withKubeConfig(caCertificate: '', clusterName: 'rajuproject-cluster', contextName: '', credentialsId: 'kube', namespace: 'microdegree', restrictKubeConfigAccess: false, serverUrl: 'https://BAF283DC60B4D753590C594BCA98E584.sk1.us-west-2.eks.amazonaws.com'){
+                withKubeConfig(caCertificate: '', clusterName: 'rajuproject-cluster', contextName: '', credentialsId: 'kube', namespace: 'microdegree', restrictKubeConfigAccess: false, serverUrl: 'https://F53E5D1275937AC71ADCD3527282201E.gr7.ap-southeast-1.eks.amazonaws.com'){
                     sh " kubectl get pods -n microdegree"
                     sh " kubectl get svc -n ${NAMESPACE}"
                 }
