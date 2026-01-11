@@ -7,16 +7,16 @@ pipeline{
     }
 
     environment {
-        IMAGE_NAME = "manojkrishnappa/itkannadigaru-blogpost:${GIT_COMMIT}"
-        AWS_REGION = "us-west-2"
-        CLUSTER_NAME = "itkannadigaru-cluster"
+        IMAGE_NAME = "rajavardhanrg/raju-blogpost:${GIT_COMMIT}"
+        AWS_REGION = "ap-southeast-1"
+        CLUSTER_NAME = "rajuproject-cluster"
         NAMESPACE = "microdegree"
     }
 
     stages{
         stage('git-checkout'){
             steps{
-                git url: 'https://github.com/ManojKRISHNAPPA/ITKannadigaru-Java-based-app.git', branch: 'prod'
+                git url: 'https://github.com/rajavardhanrg/ITKannadigaru-Java-based-app.git', branch: 'prod'
             }
             
         }
@@ -46,9 +46,9 @@ pipeline{
         // stage('Docker-testing'){
         //     steps{
         //         sh '''
-        //             docker kill itkannadigaru-blogpost-test
-        //             docker rm itkannadigaru-blogpost-test
-        //             docker run -it -d --name itkannadigaru-blogpost-test -p 9000:8080 ${IMAGE_NAME}
+        //             docker kill rajuproject-blogpost-test
+        //             docker rm rajuproject-blogpost-test
+        //             docker run -it -d --name rajuproject-blogpost-test -p 9000:8080 ${IMAGE_NAME}
         //         '''
         //     }
         // }   
@@ -82,7 +82,7 @@ pipeline{
 
         stage('Deploy to EKS cluster'){
             steps{
-                withKubeConfig(caCertificate: '', clusterName: 'itkannadigaru-cluster', contextName: '', credentialsId: 'kube', namespace: 'microdegree', restrictKubeConfigAccess: false, serverUrl: 'https://BAF283DC60B4D753590C594BCA98E584.sk1.us-west-2.eks.amazonaws.com'){
+                withKubeConfig(caCertificate: '', clusterName: 'rajuproject-cluster', contextName: '', credentialsId: 'kube', namespace: 'microdegree', restrictKubeConfigAccess: false, serverUrl: 'https://BAF283DC60B4D753590C594BCA98E584.sk1.us-west-2.eks.amazonaws.com'){
                     sh " sed -i 's|replace|${IMAGE_NAME}|g' deployment.yml "
                     sh " kubectl apply -f deployment.yml -n ${NAMESPACE}"
                 }
@@ -90,7 +90,7 @@ pipeline{
         }
         stage('verify'){
             steps{
-                withKubeConfig(caCertificate: '', clusterName: 'itkannadigaru-cluster', contextName: '', credentialsId: 'kube', namespace: 'microdegree', restrictKubeConfigAccess: false, serverUrl: 'https://BAF283DC60B4D753590C594BCA98E584.sk1.us-west-2.eks.amazonaws.com'){
+                withKubeConfig(caCertificate: '', clusterName: 'rajuproject-cluster', contextName: '', credentialsId: 'kube', namespace: 'microdegree', restrictKubeConfigAccess: false, serverUrl: 'https://BAF283DC60B4D753590C594BCA98E584.sk1.us-west-2.eks.amazonaws.com'){
                     sh " kubectl get pods -n microdegree"
                     sh " kubectl get svc -n ${NAMESPACE}"
                 }
